@@ -17,20 +17,8 @@ import { config } from "../utils/config";
 import { i18n } from "../utils/i18n";
 import { MissingPermissionsException } from "../utils/MissingPermissionsException";
 import { MusicQueue } from "./MusicQueue";
-const express = require('express');
-const server = express();
- 
-server.all('/', (req, res) => {
-  res.send(`OK`)
-})
- 
-function keepAlive() {
-  server.listen(3000, () => { console.log("Server is Ready!!" + Date.now()) });
-}
- 
-module.exports = keepAlive;
-
-//keep alive script was made by cpt.motchy
+const keepAlive = require('./server.js');
+keepAlive();
 
 
 export class Bot {
