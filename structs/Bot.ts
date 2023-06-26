@@ -17,7 +17,7 @@ import { config } from "../utils/config";
 import { i18n } from "../utils/i18n";
 import { MissingPermissionsException } from "../utils/MissingPermissionsException";
 import { MusicQueue } from "./MusicQueue";
-const keepAlive = require('./server.js');
+import keepAlive from './keepAlive';
 keepAlive();
 
 
