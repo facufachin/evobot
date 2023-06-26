@@ -51,7 +51,7 @@ export class Bot {
   }
 
   private startKeepAlive() {
-    const intervalMinutes = 15; // Interval duration in minutes
+    const intervalMinutes = 5; // Interval duration in minutes
     const intervalMilliseconds = intervalMinutes * 60 * 1000;
 
     setInterval(() => {
