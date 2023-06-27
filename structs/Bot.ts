@@ -44,6 +44,27 @@ export class Bot {
     this.onInteractionCreate();
   }
 
+
+
+    this.client.on("messageCreate", async (message) => {
+      if (message.content.startsWith(this.prefix) && !message.author.bot) {
+        const args = message.content.slice(this.prefix.length).trim().split(/ +/);
+        const commandName = args.shift()?.toLowerCase();
+
+        if (commandName === 'say') {
+          const content = args.join(' ');
+
+          // Eliminar el mensaje original
+          message.delete();
+
+          // Enviar el mensaje con lo que se escribiĂł despuĂ©s de !say
+          message.channel.send(content);
+        }
+      }
+    });
+  }
+}
+
   private async registerSlashCommands() {
     const rest = new REST({ version: "9" }).setToken(config.TOKEN);
 
