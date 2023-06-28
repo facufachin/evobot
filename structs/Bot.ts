@@ -42,8 +42,8 @@ export class Bot {
     this.client.on("error", console.error);
 
     this.onInteractionCreate();
-    
   }
+
   private async registerSlashCommands() {
     const rest = new REST({ version: "9" }).setToken(config.TOKEN);
 
@@ -59,28 +59,6 @@ export class Bot {
     await rest.put(Routes.applicationCommands(this.client.user!.id), { body: this.slashCommands });
   }
 
-  private async onInteractionCreate() {
-    // ... código existente ...
-
-    this.client.on("messageCreate", async (message) => {
-      if (message.content.startsWith(this.prefix) && !message.author.bot) {
-        const args = message.content.slice(this.prefix.length).trim().split(/ +/);
-        const commandName = args.shift()?.toLowerCase();
-
-        if (commandName === 'say') {
-          const content = args.join(' ');
-
-          // Eliminar el mensaje original
-          message.delete();
-
-          // Enviar el mensaje con lo que se escribió después de !say
-          message.channel.send(content);
-        }
-      }
-    });
-  }
-}
-  
   private async onInteractionCreate() {
     this.client.on(Events.InteractionCreate, async (interaction: Interaction): Promise<any> => {
       if (!interaction.isChatInputCommand()) return;
