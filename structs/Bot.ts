@@ -18,8 +18,8 @@ import { i18n } from "../utils/i18n";
 import { MissingPermissionsException } from "../utils/MissingPermissionsException";
 import { MusicQueue } from "./MusicQueue";
 import keepAlive from './keepAlive';
-
 keepAlive();
+
 
 export class Bot {
   public readonly prefix = config.PREFIX;
@@ -61,7 +61,7 @@ export class Bot {
 
   private async onInteractionCreate() {
     this.client.on(Events.InteractionCreate, async (interaction: Interaction): Promise<any> => {
-      if (!interaction.isCommand()) return;
+      if (!interaction.isChatInputCommand()) return;
 
       const command = this.slashCommandsMap.get(interaction.commandName);
 
@@ -72,11 +72,11 @@ export class Bot {
       }
 
       const now = Date.now();
-      const timestamps: Collection<Snowflake, number> = this.cooldowns.get(interaction.commandName);
+      const timestamps: any = this.cooldowns.get(interaction.commandName);
       const cooldownAmount = (command.cooldown || 1) * 1000;
 
       if (timestamps.has(interaction.user.id)) {
-        const expirationTime = timestamps.get(interaction.user.id)! + cooldownAmount;
+        const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
 
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000;
@@ -108,23 +108,6 @@ export class Bot {
           interaction.reply({ content: error.toString(), ephemeral: true }).catch(console.error);
         } else {
           interaction.reply({ content: i18n.__("common.errorCommand"), ephemeral: true }).catch(console.error);
-        }
-      }
-    });
-
-    this.client.on("messageCreate", async (message) => {
-      if (message.content.startsWith(this.prefix) && !message.author.bot) {
-        const args = message.content.slice(this.prefix.length).trim().split(/ +/);
-        const commandName = args.shift()?.toLowerCase();
-
-        if (commandName === 'say') {
-          const content = args.join(' ');
-
-          // Eliminar el mensaje original
-          message.delete();
-
-          // Enviar el mensaje con lo que se escribió después de !say
-          message.channel.send(content);
         }
       }
     });
