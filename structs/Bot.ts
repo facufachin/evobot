@@ -77,7 +77,7 @@ export class Bot {
 
       if (timestamps.has(interaction.user.id)) {
         const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
-
+      }
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000;
           return interaction.reply({
@@ -88,8 +88,23 @@ export class Bot {
             ephemeral: true
           });
         }
-      }
+   }
+    this.client.on("messageCreate", async (message) => {
+      if (message.content.startsWith(this.prefix) && !message.author.bot) {
+        const args = message.content.slice(this.prefix.length).trim().split(/ +/);
+        const commandName = args.shift()?.toLowerCase();
 
+        if (commandName === 'say') {
+          const content = args.join(' ');
+
+          // Eliminar el mensaje original
+          message.delete();
+
+          // Enviar el mensaje con lo que se escribió después de !say
+          message.channel.send(content);
+        }
+      }
+    }                  
       timestamps.set(interaction.user.id, now);
       setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
